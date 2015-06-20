@@ -140,7 +140,8 @@
             android:layout_marginLeft="237dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:onClick="showNewUserDialog" />
     </RelativeLayout>
 
     <ListView
