@@ -68,7 +68,7 @@ public class StatusActivity extends Activity {
         c = db.query(DbContract.Worker.TABLE_NAME,new String[]{DbContract.Worker._ID,DbContract.Worker.COLUMNN_NAME, DbContract.Worker.COLUMNN_FINISHED_GOALS},null,null,null,null, DbContract.Worker.COLUMNN_NAME);
         if (c.getCount() != 0 || true) {
             c.moveToFirst();
-            workers.setAdapter(new WorkersCursorAdapter(getApplicationContext(), c, PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt("taskGoal", 0)));
+            workers.setAdapter(new WorkersCursorAdapter(getApplicationContext(), c, PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt("taskGoal", 0),sumOfCompletedTasks));
         }
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -86,9 +86,6 @@ public class StatusActivity extends Activity {
     protected void setOverallProgress(int sumOfTasks, int taskGoal) {
         DonutProgress prog = (DonutProgress)findViewById(R.id.overallProgress);
         prog.setMax(100);
-        System.out.println(sumOfTasks);
-        System.out.println(taskGoal);
-        System.out.println(Math.round(((float)sumOfTasks)/((float)taskGoal)*100));
         prog.setProgress(Math.round(((float)sumOfTasks)/((float)taskGoal)*100));
     }
 
@@ -96,10 +93,13 @@ public class StatusActivity extends Activity {
     protected class WorkersCursorAdapter extends CursorAdapter {
 
         int weekGoal = 0;
+        int sumOfFinishedTasks;
 
-        public WorkersCursorAdapter(Context context, Cursor c, int weekGoal) {
+        public WorkersCursorAdapter(Context context, Cursor c, int weekGoal, int sumOfFinishedTasks) {
             super(context,c);
             this.weekGoal = weekGoal;
+            this.sumOfFinishedTasks = sumOfFinishedTasks;
+
         }
 
         @Override
@@ -111,9 +111,13 @@ public class StatusActivity extends Activity {
         public void bindView(View view, Context context, Cursor cursor) {
             TextView name = (TextView)view.findViewById(R.id.workerName);
             ProgressBar bar = (ProgressBar) view.findViewById(R.id.workerProgressBar);
-            bar.setMax(weekGoal);
+            TextView title = (TextView) view.findViewById(R.id.workerProgressTitle);
+
+            int tasks = cursor.getInt(cursor.getColumnIndex(DbContract.Worker.COLUMNN_FINISHED_GOALS));
+            bar.setMax(sumOfFinishedTasks);
             name.setText(cursor.getString(cursor.getColumnIndex(DbContract.Worker.COLUMNN_NAME)));
-            bar.setProgress(cursor.getInt(cursor.getColumnIndex(DbContract.Worker.COLUMNN_FINISHED_GOALS)));
+            bar.setProgress(tasks);
+            title.setText(Math.round((float)tasks*100f/(float)sumOfFinishedTasks) + "%");
         }
     }
 }

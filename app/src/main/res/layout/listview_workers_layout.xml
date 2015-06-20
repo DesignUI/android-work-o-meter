@@ -4,20 +4,43 @@
     android:orientation="horizontal">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/workerName"
         android:layout_gravity="center_vertical"
-        android:layout_weight="4" />
+        android:layout_weight="3" />
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/workerProgressBar"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="6" />
+        android:layout_height="match_parent"
+        android:layout_weight="4">
+        <ProgressBar
+            android:background="@drawable/horizontal_progressbar_background"
+
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/workerProgressBar"
+            android:layout_gravity="center"
+            android:progressDrawable="@drawable/horizontal_progressbar_progress"
+            android:max="10"
+            android:progress="5"
+            android:minHeight="15dp"
+            android:maxHeight="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="10"
+            android:id="@+id/workerProgressTitle"
+            android:layout_gravity="center"
+            android:textColor="#ff950095" />
+
+    </FrameLayout>
+
+
 
 </LinearLayout>

@@ -2,11 +2,11 @@
     <string name="app_name">Work\'o\'meter</string>
     <string name="title_activity_status">Innovare Work\'o\'meter</string>
     <string name="empty_worker_listview">No employees available.</string>
-    <string name="total_tasks_description">Finished</string>
-    <string name="overall_progress_description">Progress</string>
+    <string name="total_tasks_description">Tasks\nfinished</string>
+    <string name="overall_progress_description">Overall\nprogress</string>
     <string name="title_activity_settings">SettingsActivity</string>
-
+    <string name="labour_ratio">Labour ratio</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Preferences</string>
-
+    <string name="current_tasks">Current target (in tasks):</string>
 </resources>
