@@ -3,6 +3,7 @@ package cz.innovare.workometer.view.activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,8 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
@@ -68,7 +71,11 @@ public class StatusActivity extends Activity implements AdapterView.OnItemClickL
     protected void setOverallProgress(int sumOfTasks, int taskGoal) {
         DonutProgress prog = (DonutProgress)findViewById(R.id.overallProgress);
         prog.setMax(100);
-        prog.setProgress(Math.round(((float) sumOfTasks) / ((float) taskGoal) * 100));
+        if (sumOfTasks <= taskGoal) {
+            prog.setProgress(Math.round(((float) sumOfTasks) / ((float) taskGoal) * 100));
+        } else {
+            prog.setProgress(prog.getMax());
+        }
     }
 
 
@@ -81,20 +88,56 @@ public class StatusActivity extends Activity implements AdapterView.OnItemClickL
         dbHelper.getWritableDatabase().insert(DbContract.Worker.TABLE_NAME, null, cv);
     }
 
+    public void setTaskTarget(int n) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sp.edit().putInt("taskGoal",n).commit();
+        ((TextView)findViewById(R.id.currentTasksNumber)).setText(Integer.toString(n));
+    }
+
     public void showNewUserDialog(View view) {
-        AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext())
-                .setView(getLayoutInflater().inflate(R.layout.fragment_dialog_add_worker,null,false))
-                .setTitle("Add new employee")
-                .setPositiveButton("Add",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                Log.i("AddUserDialog","Closed");
-                            }
-                        }
-                )
-                .setNegativeButton("Cancel", null)
-                .create();
-        alertDialog.show();
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_add_worker);
+        dialog.setTitle("New employee");
+        dialog.findViewById(R.id.dialog_add).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addNewUser(((EditText) dialog.findViewById(R.id.newEmployeeName)).getText().toString());
+                dialog.dismiss();
+                revalidate();
+            }
+        });
+        dialog.findViewById(R.id.dialog_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public void showTargetChangeDialog(View view) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_change_task_target);
+        dialog.setTitle("Tasks");
+        NumberPicker picker = (NumberPicker)dialog.findViewById(R.id.number_of_tasks);
+        picker.setMaxValue(10000);
+        picker.setMinValue(0);
+        picker.setValue(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt("taskGoal",100));
+        dialog.findViewById(R.id.dialog_change).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setTaskTarget(((NumberPicker) dialog.findViewById(R.id.number_of_tasks)).getValue());
+                dialog.dismiss();
+                revalidate();
+            }
+        });
+        dialog.findViewById(R.id.dialog_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     @Override
