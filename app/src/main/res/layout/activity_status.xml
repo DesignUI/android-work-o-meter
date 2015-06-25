@@ -142,7 +142,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:background="@android:color/transparent"
-            android:onClick="showNewUserDialog" />
+            android:onClick="showNewEmployeeDialog" />
     </RelativeLayout>
 
     <ListView

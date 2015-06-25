@@ -34,10 +34,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="10"
-            android:id="@+id/workerProgressTitle"
-            android:layout_gravity="center"
-            android:textColor="#ff950095" />
+            android:id="@+id/workerProgressTasks"
+            android:layout_gravity="left|center_vertical"
+            android:textColor="#ff950095"
+            android:layout_marginLeft="20dp"
+            android:text="5 tasks" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/workerProgressPercent"
+            android:layout_gravity="center_vertical|right"
+            android:textColor="#ff950095"
+            android:layout_marginRight="20dp"
+            android:text="50%" />
 
     </FrameLayout>
 
